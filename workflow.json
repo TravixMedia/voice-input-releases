@@ -60,7 +60,7 @@
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "transkript"
+              "outputKey": "transcript"
             },
             {
               "conditions": {
@@ -138,7 +138,7 @@
         }
       },
       "id": "cd0a5149-4020-45a7-a1b8-f5fceb9ce87a",
-      "name": "Modus Switch",
+      "name": "Mode Switch",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [880, 480]
@@ -153,14 +153,14 @@
         "messages": {
           "values": [
             {
-              "content": "=Korriegiere die Satzstellung und vermeide überflüssige Stoppwörter.\nBeispiel:\n- Ursprünglicher Text: \"Ich möchte, dass beim Formattranskript im Workflow nur diese Anpassung vorgenommen wird.\"\n- Überarbeiteter Text: \"Ich möchte, dass im Workflow nur diese Anpassung beim Formattranskript vorgenommen wird.\"\n\nAntworte nur mit dem überarbeiteten Text.\nHier der User Prompt:\n{{ $('Transcribe').item.json.text }}"
+              "content": "=Correct the sentence structure and remove unnecessary filler words.\nExample:\n- Original text: \"I want that in the workflow only this adjustment is made for the format transcript.\"\n- Revised text: \"I want only this adjustment to be made in the workflow for the format transcript.\"\n\nRespond only with the revised text.\nHere is the user input:\n{{ $('Transcribe').item.json.text }}"
             }
           ]
         },
         "options": {}
       },
       "id": "6957ce3c-8c53-4107-a609-f989bcff3cc6",
-      "name": "Format Transkript",
+      "name": "Format Transcript",
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [1104, 240],
@@ -181,7 +181,7 @@
         "messages": {
           "values": [
             {
-              "content": "=Du bist ein Promptgenerator für Claude Code. Wandle das folgende Transkript in einen prägnanten, klaren Prompt um.\n\nWICHTIG:\n- Antworte NUR mit dem fertigen Prompt\n- Stelle KEINE Rückfragen\n- Frage NICHT nach zusätzlichen Informationen\n- Verarbeite das Transkript so wie es ist\n- Formuliere Anweisungen direkt und eindeutig\n\nTranskript:\n{{ $('Transcribe').item.json.text }}"
+              "content": "=You are a prompt generator for Claude Code. Transform the following transcript into a concise, clear prompt.\n\nIMPORTANT:\n- Respond ONLY with the finished prompt\n- Do NOT ask follow-up questions\n- Do NOT request additional information\n- Process the transcript as-is\n- Formulate instructions directly and unambiguously\n\nTranscript:\n{{ $('Transcribe').item.json.text }}"
             }
           ]
         },
@@ -209,7 +209,7 @@
         "messages": {
           "values": [
             {
-              "content": "=Du bist ein professioneller E-Mail-Formatierer. Wandle das folgende gesprochene Transkript in eine professionelle, gut formatierte E-Mail um.\n\nREGELN:\n- Korrigiere Satzstellung und Grammatik\n- Entferne alle Füllwörter (\"also\", \"ähm\", \"öh\", \"äh\", \"quasi\", \"sozusagen\", \"irgendwie\", etc.)\n- Erstelle saubere Umbrüche zwischen Absätzen\n- Bei Aufzählungen: Verwende korrekte Einrückungen und Listenpunkte\n- Schließe die Mail mit einer passenden Grußformel ab (z.B. \"Mit freundlichen Grüßen\" oder \"Viele Grüße\")\n- Stelle KEINE Rückfragen\n- Generiere einen passenden, prägnanten Betreff basierend auf dem Inhalt\n\nAntworte NUR im folgenden JSON-Format (ohne Markdown-Codeblock):\n{\"subject\": \"Der generierte Betreff\", \"body\": \"Der formatierte E-Mail-Text\"}\n\nTranskript:\n{{ $('Transcribe').item.json.text }}"
+              "content": "=You are a professional email formatter. Transform the following spoken transcript into a professional, well-formatted email.\n\nRULES:\n- Correct sentence structure and grammar\n- Remove all filler words (\"like\", \"um\", \"uh\", \"you know\", \"basically\", \"sort of\", \"kind of\", etc.)\n- Create clean line breaks between paragraphs\n- For lists: Use proper indentation and bullet points\n- Close the email with an appropriate greeting (e.g., \"Best regards\" or \"Kind regards\")\n- Do NOT ask follow-up questions\n- Generate a suitable, concise subject line based on the content\n\nRespond ONLY in the following JSON format (without markdown code block):\n{\"subject\": \"The generated subject\", \"body\": \"The formatted email text\"}\n\nTranscript:\n{{ $('Transcribe').item.json.text }}"
             }
           ]
         },
@@ -237,7 +237,7 @@
         "messages": {
           "values": [
             {
-              "content": "=Du bist ein präziser Textanalyst. Deine Aufgabe ist es, den bereitgestellten Inhalt gemäß der gesprochenen Anweisung zu analysieren.\n\nWICHTIG:\n- Antworte NUR mit dem Analyseergebnis\n- Stelle KEINE Rückfragen\n- Frage NICHT nach zusätzlichen Informationen\n- Führe die Analyse genau so durch, wie in der Anweisung beschrieben\n- Das Ergebnis soll klar strukturiert und verständlich sein\n- Der Benutzer kann KEINE Dateien erstellen - gib immer nur Text zurück\n\nANWEISUNG (Transkript):\n{{ $('Transcribe').item.json.text }}\n\nINHALT ZUR ANALYSE:\n{{ $('Voice Webhook').item.json.body.attachment ? $('Voice Webhook').item.json.body.attachment : '' }}\n{{ $('Voice Webhook').item.json.body.analyseText ? $('Voice Webhook').item.json.body.analyseText : '' }}"
+              "content": "=You are a precise text analyst. Your task is to analyze the provided content according to the spoken instruction.\n\nIMPORTANT:\n- Respond ONLY with the analysis result\n- Do NOT ask follow-up questions\n- Do NOT request additional information\n- Perform the analysis exactly as described in the instruction\n- The result should be clearly structured and understandable\n- The user CANNOT create files - always return only text\n\nINSTRUCTION (Transcript):\n{{ $('Transcribe').item.json.text }}\n\nCONTENT TO ANALYZE:\n{{ $('Voice Webhook').item.json.body.attachment ? $('Voice Webhook').item.json.body.attachment : '' }}\n{{ $('Voice Webhook').item.json.body.analyseText ? $('Voice Webhook').item.json.body.analyseText : '' }}"
             }
           ]
         },
@@ -272,18 +272,18 @@
       "main": [
         [
           {
-            "node": "Modus Switch",
+            "node": "Mode Switch",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Modus Switch": {
+    "Mode Switch": {
       "main": [
         [
           {
-            "node": "Format Transkript",
+            "node": "Format Transcript",
             "type": "main",
             "index": 0
           }

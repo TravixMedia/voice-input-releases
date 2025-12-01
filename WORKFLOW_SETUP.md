@@ -1,83 +1,82 @@
-# N8N Workflow Setup für Voice Input
+# N8N Workflow Setup for Voice Input
 
-Voice Input benötigt einen N8N-Workflow für die Sprachtranskription und -verarbeitung.
+Voice Input requires an N8N workflow for speech transcription and processing.
 
-## Voraussetzungen
+## Prerequisites
 
-- N8N Installation (self-hosted oder Cloud)
+- N8N installation (self-hosted or Cloud)
 - OpenAI API Key
 
 ## Installation
 
-### Option 1: Workflow importieren
+### Option 1: Import Workflow
 
-1. Öffne N8N
-2. Gehe zu **Workflows** → **Import from File**
-3. Wähle `workflow.json` aus diesem Repository
-4. Konfiguriere die OpenAI Credentials (siehe unten)
+1. Open N8N
+2. Go to **Workflows** → **Import from File**
+3. Select `workflow.json` from this repository
+4. Configure OpenAI Credentials (see below)
 
-### Option 2: Manuell erstellen
+### Option 2: Create Manually
 
-1. Erstelle einen neuen Workflow
-2. Füge folgende Nodes hinzu:
+1. Create a new workflow
+2. Add the following nodes:
 
 ```
-[Webhook] → [OpenAI Transcribe] → [Switch] → [Format Transkript]
+[Webhook] → [OpenAI Transcribe] → [Switch] → [Format Transcript]
                                           → [Format Prompt]
                                           → [Format Mail]
                                           → [Format Analyse]
 ```
 
-## OpenAI Credentials konfigurieren
+## Configure OpenAI Credentials
 
-1. Gehe zu **Credentials** → **New**
-2. Wähle **OpenAI**
-3. Füge deinen API Key ein
-4. Speichern
-5. Aktualisiere alle OpenAI-Nodes im Workflow mit dieser Credential
+1. Go to **Credentials** → **New**
+2. Select **OpenAI**
+3. Enter your API Key
+4. Save
+5. Update all OpenAI nodes in the workflow with this credential
 
-## Webhook-URL ermitteln
+## Get the Webhook URL
 
-1. Öffne den Workflow
-2. Klicke auf den **Voice Webhook** Node
-3. Kopiere die **Production URL** (z.B. `https://dein-n8n.de/webhook/voice-input`)
-4. Aktiviere den Workflow (Toggle oben rechts)
+1. Open the workflow
+2. Click on the **Voice Webhook** node
+3. Copy the **Production URL** (e.g., `https://your-n8n.com/webhook/voice-input`)
+4. Activate the workflow (toggle in top right corner)
 
-## In Voice Input App konfigurieren
+## Configure in Voice Input App
 
-1. Öffne Voice Input
-2. Gehe zu **Einstellungen** (Zahnrad-Icon)
-3. Füge die Webhook-URL ein
-4. Speichern
+1. Open Voice Input
+2. Go to **Settings** (gear icon)
+3. Paste the webhook URL
+4. Save
 
-## Workflow-Funktionen
+## Workflow Functions
 
-| Modus | Beschreibung |
-|-------|-------------|
-| **Transkript** | Korrigiert Satzstellung, entfernt Füllwörter |
-| **Prompt** | Wandelt Sprache in Claude Code Prompts um |
-| **Mail** | Formatiert als professionelle E-Mail mit Betreff |
-| **Analyse** | Analysiert Text basierend auf Sprachanweisung |
-| **Terminal** | Rohes Transkript für direkte Terminal-Eingabe |
+| Mode | Description |
+|------|-------------|
+| **Transcript** | Corrects sentence structure, removes filler words |
+| **Prompt** | Transforms speech into Claude Code prompts |
+| **Mail** | Formats as professional email with subject line |
+| **Analyse** | Analyzes text based on voice instruction |
 
-## Anpassungen
+## Customization
 
-Du kannst die Prompts in den Format-Nodes nach Bedarf anpassen:
+You can customize the prompts in the Format nodes as needed:
 
-- **Format Transkript**: Satzkorrektur-Regeln
-- **Format Prompt**: Prompt-Stil für Claude Code
-- **Format Mail**: E-Mail-Format und Grußformeln
-- **Format Analyse**: Analyse-Anweisungen
+- **Format Transcript**: Sentence correction rules
+- **Format Prompt**: Prompt style for Claude Code
+- **Format Mail**: Email format and greetings
+- **Format Analyse**: Analysis instructions
 
-## Fehlerbehebung
+## Troubleshooting
 
-### "Keine N8N-URL konfiguriert"
-→ Webhook-URL in den App-Einstellungen eintragen
+### "No N8N URL configured"
+→ Enter webhook URL in app settings
 
-### "Webhook-Fehler"
-→ Prüfe ob der Workflow aktiviert ist
-→ Prüfe ob die URL korrekt ist (Production, nicht Test)
+### "Webhook error"
+→ Check if workflow is activated
+→ Check if URL is correct (Production, not Test)
 
-### "JSON-Fehler"
-→ Prüfe die OpenAI Credentials
-→ Prüfe ob der API Key gültig ist
+### "JSON error"
+→ Check OpenAI Credentials
+→ Check if API key is valid

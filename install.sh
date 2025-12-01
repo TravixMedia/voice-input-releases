@@ -13,22 +13,22 @@ echo "========================"
 # Detect package manager and architecture
 ARCH=$(uname -m)
 if [[ "$ARCH" != "x86_64" ]]; then
-    echo "❌ Fehler: Nur x86_64 wird unterstützt (gefunden: $ARCH)"
+    echo "❌ Error: Only x86_64 is supported (found: $ARCH)"
     exit 1
 fi
 
 # Check for required tools
 if ! command -v curl &> /dev/null; then
-    echo "❌ Fehler: curl ist nicht installiert"
+    echo "❌ Error: curl is not installed"
     exit 1
 fi
 
 # Get latest version if not specified
 if [[ "$VERSION" == "latest" ]]; then
-    echo "📡 Hole neueste Version..."
+    echo "📡 Fetching latest version..."
     VERSION=$(curl -fsSL "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
     if [[ -z "$VERSION" ]]; then
-        echo "❌ Fehler: Konnte Version nicht ermitteln"
+        echo "❌ Error: Could not determine version"
         exit 1
     fi
 fi
@@ -48,24 +48,24 @@ TMPDIR=$(mktemp -d)
 cd "$TMPDIR"
 
 if [[ "$USE_DEB" == "true" ]]; then
-    echo "📥 Lade DEB-Paket herunter..."
+    echo "📥 Downloading DEB package..."
     FILENAME="Voice.Input_${VERSION_NUM}_amd64.deb"
     curl -fsSL -o "$FILENAME" "https://github.com/$REPO/releases/download/$VERSION/$FILENAME"
     
-    echo "📦 Installiere Abhängigkeiten..."
+    echo "📦 Installing dependencies..."
     sudo apt update -qq
     sudo apt install -y -qq xdotool xclip libasound2 2>/dev/null || true
     
-    echo "🔧 Installiere Voice Input..."
+    echo "🔧 Installing Voice Input..."
     sudo dpkg -i "$FILENAME" || sudo apt-get install -f -y
     
     echo ""
-    echo "✅ Installation abgeschlossen!"
+    echo "✅ Installation complete!"
     echo ""
-    echo "Starte mit: voice-input"
-    echo "Oder suche 'Voice Input' im Anwendungsmenü"
+    echo "Start with: voice-input"
+    echo "Or search for 'Voice Input' in your application menu"
 else
-    echo "📥 Lade AppImage herunter..."
+    echo "📥 Downloading AppImage..."
     FILENAME="Voice.Input_${VERSION_NUM}_amd64.AppImage"
     curl -fsSL -o "$FILENAME" "https://github.com/$REPO/releases/download/$VERSION/$FILENAME"
     
@@ -76,11 +76,11 @@ else
     mv "$FILENAME" ~/.local/bin/voice-input
     
     echo ""
-    echo "✅ Installation abgeschlossen!"
+    echo "✅ Installation complete!"
     echo ""
-    echo "AppImage installiert in: ~/.local/bin/voice-input"
+    echo "AppImage installed to: ~/.local/bin/voice-input"
     echo ""
-    echo "Stelle sicher, dass ~/.local/bin in deinem PATH ist:"
+    echo "Make sure ~/.local/bin is in your PATH:"
     echo '  export PATH="$HOME/.local/bin:$PATH"'
 fi
 
@@ -89,4 +89,7 @@ cd /
 rm -rf "$TMPDIR"
 
 echo ""
-echo "🎤 Viel Spaß mit Voice Input!"
+echo "🎤 Enjoy Voice Input!"
+echo ""
+echo "📋 Next step: Set up the N8N workflow"
+echo "   See: https://github.com/TravixMedia/voice-input-releases/blob/main/WORKFLOW_SETUP.md"

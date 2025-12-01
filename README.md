@@ -1,49 +1,49 @@
 # Voice Input Releases
 
-Distribution repository for Voice Input App - Spracheingabe zu Text mit KI-Formatierung.
+Distribution repository for Voice Input App - Speech-to-text with AI formatting.
 
-## 🚀 Ein-Zeilen-Installation
+## One-Line Installation
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/TravixMedia/voice-input-releases/main/install.sh | bash
 ```
 
-Das Script erkennt automatisch dein System und installiert:
-- **Debian/Ubuntu**: DEB-Paket mit `dpkg`
-- **Andere Linux**: AppImage in `~/.local/bin`
+The script automatically detects your system and installs:
+- **Debian/Ubuntu**: DEB package via `dpkg`
+- **Other Linux**: AppImage to `~/.local/bin`
 
-### Spezifische Version installieren
+### Install Specific Version
 
 ```bash
 VERSION=v1.2.0 curl -fsSL https://raw.githubusercontent.com/TravixMedia/voice-input-releases/main/install.sh | bash
 ```
 
-## ⚙️ N8N Workflow einrichten
+## N8N Workflow Setup
 
-Voice Input benötigt einen N8N-Workflow für die Transkription.
+Voice Input requires an N8N workflow for transcription.
 
-**→ [Workflow Setup Anleitung](WORKFLOW_SETUP.md)**
+**[Workflow Setup Guide](WORKFLOW_SETUP.md)**
 
-Kurzversion:
-1. `workflow.json` in N8N importieren
-2. OpenAI Credentials konfigurieren
-3. Workflow aktivieren
-4. Webhook-URL in Voice Input App eintragen
+Quick setup:
+1. Import `workflow.json` into N8N
+2. Configure OpenAI credentials
+3. Activate the workflow
+4. Enter the webhook URL in Voice Input app
 
-## 📦 Manuelle Installation
+## Manual Installation
 
 ### Debian/Ubuntu
 
 ```bash
-# Abhängigkeiten
+# Dependencies
 sudo apt install xdotool xclip libasound2
 
-# Download und Installation
+# Download and install
 wget https://github.com/TravixMedia/voice-input-releases/releases/latest/download/Voice.Input_1.2.0_amd64.deb
 sudo dpkg -i Voice.Input_1.2.0_amd64.deb
 ```
 
-### AppImage (alle Linux-Distributionen)
+### AppImage (all Linux distributions)
 
 ```bash
 wget https://github.com/TravixMedia/voice-input-releases/releases/latest/download/Voice.Input_1.2.0_amd64.AppImage
@@ -51,28 +51,26 @@ chmod +x Voice.Input_1.2.0_amd64.AppImage
 ./Voice.Input_1.2.0_amd64.AppImage
 ```
 
-## 🎤 Modi
+## Modes
 
-| Modus | Beschreibung |
-|-------|-------------|
-| **Prompt** | Sprache → Claude Code Prompt |
-| **Transkript** | Sprache → korrigierter Text |
-| **Mail** | Sprache → formatierte E-Mail |
-| **Analyse** | Sprache + Text → Analyse |
-| **Terminal** | Sprache → direkt in CLI tippen |
+| Mode | Description |
+|------|-------------|
+| **Prompt** | Speech to Claude Code prompt |
+| **Transcript** | Speech to corrected text |
+| **Mail** | Speech to formatted email |
+| **Analyse** | Speech + text to analysis |
 
-## 🔄 Auto-Updates
+## Auto-Updates
 
-Die App prüft automatisch auf Updates und kann sich selbst aktualisieren.
+The app automatically checks for updates and can update itself.
 
-## 📋 Abhängigkeiten
+## Dependencies
 
-- `xdotool` - Für Terminal-Modus (Text-Eingabe in CLI-Apps)
-- `xclip` - Für Clipboard-Funktionen
-- `libasound2` - Audio-Aufnahme
+- `xclip` - Clipboard functions
+- `libasound2` - Audio recording
 
-## 🔗 Links
+## Links
 
 - [Releases](https://github.com/TravixMedia/voice-input-releases/releases)
-- [Neueste Version](https://github.com/TravixMedia/voice-input-releases/releases/latest)
+- [Latest Version](https://github.com/TravixMedia/voice-input-releases/releases/latest)
 - [Workflow Setup](WORKFLOW_SETUP.md)
