@@ -1,0 +1,319 @@
+{
+  "name": "Voice Input Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-input",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "d49b8310-505d-474c-b9c0-64102f0de0d3",
+      "name": "Voice Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [432, 528],
+      "webhookId": "voice-input-webhook"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "de"
+        }
+      },
+      "id": "bd740ccf-cd99-46c5-bdf3-c4f78d19b3a7",
+      "name": "Transcribe",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [656, 528],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Voice Webhook').item.json.body.mode }}",
+                    "rightValue": "transkript",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "transkript"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Voice Webhook').item.json.body.mode }}",
+                    "rightValue": "prompt",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "prompt"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Voice Webhook').item.json.body.mode }}",
+                    "rightValue": "mail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mail"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Voice Webhook').item.json.body.mode }}",
+                    "rightValue": "analyse",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "analyse"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "cd0a5149-4020-45a7-a1b8-f5fceb9ce87a",
+      "name": "Modus Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [880, 480]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Korriegiere die Satzstellung und vermeide überflüssige Stoppwörter.\nBeispiel:\n- Ursprünglicher Text: \"Ich möchte, dass beim Formattranskript im Workflow nur diese Anpassung vorgenommen wird.\"\n- Überarbeiteter Text: \"Ich möchte, dass im Workflow nur diese Anpassung beim Formattranskript vorgenommen wird.\"\n\nAntworte nur mit dem überarbeiteten Text.\nHier der User Prompt:\n{{ $('Transcribe').item.json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6957ce3c-8c53-4107-a609-f989bcff3cc6",
+      "name": "Format Transkript",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1104, 240],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Du bist ein Promptgenerator für Claude Code. Wandle das folgende Transkript in einen prägnanten, klaren Prompt um.\n\nWICHTIG:\n- Antworte NUR mit dem fertigen Prompt\n- Stelle KEINE Rückfragen\n- Frage NICHT nach zusätzlichen Informationen\n- Verarbeite das Transkript so wie es ist\n- Formuliere Anweisungen direkt und eindeutig\n\nTranskript:\n{{ $('Transcribe').item.json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0ca74efa-caed-4f02-a316-00264c37920e",
+      "name": "Format Prompt",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1104, 432],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Du bist ein professioneller E-Mail-Formatierer. Wandle das folgende gesprochene Transkript in eine professionelle, gut formatierte E-Mail um.\n\nREGELN:\n- Korrigiere Satzstellung und Grammatik\n- Entferne alle Füllwörter (\"also\", \"ähm\", \"öh\", \"äh\", \"quasi\", \"sozusagen\", \"irgendwie\", etc.)\n- Erstelle saubere Umbrüche zwischen Absätzen\n- Bei Aufzählungen: Verwende korrekte Einrückungen und Listenpunkte\n- Schließe die Mail mit einer passenden Grußformel ab (z.B. \"Mit freundlichen Grüßen\" oder \"Viele Grüße\")\n- Stelle KEINE Rückfragen\n- Generiere einen passenden, prägnanten Betreff basierend auf dem Inhalt\n\nAntworte NUR im folgenden JSON-Format (ohne Markdown-Codeblock):\n{\"subject\": \"Der generierte Betreff\", \"body\": \"Der formatierte E-Mail-Text\"}\n\nTranskript:\n{{ $('Transcribe').item.json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-mail-node-001",
+      "name": "Format Mail",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1104, 624],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Du bist ein präziser Textanalyst. Deine Aufgabe ist es, den bereitgestellten Inhalt gemäß der gesprochenen Anweisung zu analysieren.\n\nWICHTIG:\n- Antworte NUR mit dem Analyseergebnis\n- Stelle KEINE Rückfragen\n- Frage NICHT nach zusätzlichen Informationen\n- Führe die Analyse genau so durch, wie in der Anweisung beschrieben\n- Das Ergebnis soll klar strukturiert und verständlich sein\n- Der Benutzer kann KEINE Dateien erstellen - gib immer nur Text zurück\n\nANWEISUNG (Transkript):\n{{ $('Transcribe').item.json.text }}\n\nINHALT ZUR ANALYSE:\n{{ $('Voice Webhook').item.json.body.attachment ? $('Voice Webhook').item.json.body.attachment : '' }}\n{{ $('Voice Webhook').item.json.body.analyseText ? $('Voice Webhook').item.json.body.analyseText : '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-analyse-node-001",
+      "name": "Format Analyse",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1104, 816],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Voice Webhook": {
+      "main": [
+        [
+          {
+            "node": "Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe": {
+      "main": [
+        [
+          {
+            "node": "Modus Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modus Switch": {
+      "main": [
+        [
+          {
+            "node": "Format Transkript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Mail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Analyse",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
