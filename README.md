@@ -2,6 +2,12 @@
 
 Distribution repository for Voice Input App - Speech-to-text with AI formatting.
 
+## System Requirements
+
+- **Ubuntu 22.04+** / Debian 12+ / Fedora 36+
+- x86_64 architecture
+- N8N instance with OpenAI API access
+
 ## One-Line Installation
 
 ```bash
